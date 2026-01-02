@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+            crossorigin="anonymous"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Нерухомість Україна</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      // АГРЕССИВНАЯ защита от браузерных расширений
+      (function() {
+        // Предотвращаем переопределение ethereum до загрузки расширений
+        if (!window.ethereum) {
+          Object.defineProperty(window, 'ethereum', {
+            value: null,
+            writable: false,
+            configurable: false
+          });
+        }
+
+        // Защищаем Object.defineProperty от расширений
+        const originalDefineProperty = Object.defineProperty;
+        Object.defineProperty = function(obj, prop, descriptor) {
+          try {
+            // Специально игнорируем попытки переопределения ethereum
+            if (prop === 'ethereum' && obj === window) {
+              console.warn('Browser extension blocked from redefining ethereum');
+              return obj;
+            }
+            return originalDefineProperty.call(this, obj, prop, descriptor);
+          } catch (error) {
+            // Игнорируем все ошибки, связанные с браузерными расширениями
+            if (error.message && (
+                error.message.includes('Invalid property descriptor') ||
+                error.message.includes('Cannot redefine property') ||
+                (prop === 'ethereum' && obj === window)
+            )) {
+              console.warn('Browser extension error suppressed:', error.message);
+              return obj;
+            }
+            throw error;
+          }
+        };
+
+        // Защищаем Object.getOwnPropertyDescriptor
+        const originalGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+        Object.getOwnPropertyDescriptor = function(obj, prop) {
+          try {
+            return originalGetOwnPropertyDescriptor.call(this, obj, prop);
+          } catch (error) {
+            if (prop === 'ethereum' && obj === window) {
+              return { value: null, writable: false, enumerable: false, configurable: false };
+            }
+            throw error;
+          }
+        };
+
+        // Обработка всех ошибок
+        window.addEventListener('error', function(event) {
+          const message = event.error && event.error.message ? event.error.message.toLowerCase() : '';
+          const filename = event.filename ? event.filename.toLowerCase() : '';
+
+          if (message.includes('invalid property descriptor') ||
+              message.includes('cannot redefine property') ||
+              message.includes('ethereum') ||
+              filename.includes('chrome-extension://') ||
+              filename.includes('moz-extension://') ||
+              filename.includes('safari-extension://')) {
+            console.warn('Browser extension error suppressed:', event.error.message);
+            event.preventDefault();
+            return false;
+          }
+        });
+
+        // Обработка необработанных отклонений промисов
+        window.addEventListener('unhandledrejection', function(event) {
+          const message = event.reason && event.reason.message ? event.reason.message.toLowerCase() : '';
+          if (message.includes('invalid property descriptor') ||
+              message.includes('cannot redefine property') ||
+              message.includes('ethereum')) {
+            console.warn('Browser extension promise rejection suppressed:', event.reason.message);
+            event.preventDefault();
+            return false;
+          }
+        });
+
+        // Отключаем console.error для расширений
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+          const message = args.join(' ').toLowerCase();
+          if (message.includes('invalid property descriptor') ||
+              message.includes('cannot redefine property') ||
+              message.includes('ethereum')) {
+            return; // Не логируем
+          }
+          return originalConsoleError.apply(this, args);
+        };
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+databases:
+  - name: online-store-db
+    databaseName: online_store
+    user: online_store
+    plan: free
+
+services:
+  - type: web
+    name: online-store-api
+    env: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DB_HOST
+        fromDatabase:
+          name: online-store-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: online-store-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: online-store-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: online-store-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: online-store-db
+          property: password
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CLIENT_URL
+        value: https://online-store-client.onrender.com
+      - key: USE_SQLITE
+        value: "0"
+
+  - type: web
+    name: online-store-client
+    env: static
+    rootDir: client
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://online-store-api.onrender.com/

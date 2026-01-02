@@ -1,0 +1,24 @@
+# Node dependencies
+online-store/client/node_modules/
+online-store/server/node_modules/
+
+# Build artifacts
+online-store/client/build/
+online-store/server/static/
+
+# Environment files
+online-store/.env
+online-store/client/.env
+online-store/server/.env
+
+# Databases / temp data
+online-store/server/database.sqlite
+
+# Logs
+*.log
+npm-debug.log*
+online-store/server/server_output.txt
+
+# Cache files
+.eslintcache
+**/.eslintcache

@@ -1,0 +1,48 @@
+/* Глобальные стили для убирания стрелок спиннера в input type="number" */
+
+/* Для Webkit браузеров (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Для Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* Дополнительные стили для лучшего вида формы */
+input[type="number"] {
+    appearance: textfield;
+}
+
+/* Убираем рамку у поля выбора файла */
+input[type="file"] {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+/* Зелёные галочки в чекбоксах */
+input[type="checkbox"] {
+    transform: scale(1.3);
+    margin-right: 5px;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: #28a745;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+/* Дополнительная стилизация для лучшего вида */
+.form-check-input {
+    transform: scale(1.3);
+    margin-right: 5px;
+}
+
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
