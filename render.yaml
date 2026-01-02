@@ -8,7 +8,7 @@ services:
   - type: web
     name: online-store-api
     env: node
-    rootDir: server
+    rootDir: online-store/server
     plan: free
     buildCommand: npm install
     startCommand: npm run start
@@ -45,7 +45,7 @@ services:
   - type: web
     name: online-store-client
     env: static
-    rootDir: client
+    rootDir: online-store/client
     plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: build
